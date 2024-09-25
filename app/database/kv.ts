@@ -1,15 +1,13 @@
 import { z } from "zod";
 import { type Vote, voteSchema } from "../schemas/vote.ts";
+import { isDenoDeploy } from "../utils/environments.ts";
 
 const KV_PREFIX = "voting-2024";
 
-// Deno Deploy での動作かどうか判定するために、Deno Deploy のプリセット環境変数 DENO_REGION を取得する
-const DENO_REGION = Deno.env.get("DENO_REGION");
-
 let kv: Deno.Kv;
 
-// Deno Deploy でなければローカルのファイルを KV データストアとして利用する
-if (DENO_REGION) {
+// Deno Deploy でなければ self-hosted の Deno KV を KV データストアとして利用する
+if (isDenoDeploy()) {
   kv = await Deno.openKv();
 } else {
   const kvEndpoint = Deno.env.get("DENO_KV_ENDPOINT");

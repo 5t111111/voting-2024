@@ -3,6 +3,7 @@ import { CookieStore, Session, sessionMiddleware } from "hono_sessions";
 
 import adminApiRoutes from "./routes/admin_api_routes.ts";
 import pageRoutes from "./routes/page_routes.tsx";
+import { isProd } from "./utils/environments.ts";
 
 /**
  * 必要な型情報を持つ最低限の Hono アプリケーションのインスタンスを生成する
@@ -45,7 +46,7 @@ export const buildServerApp = () => {
         path: "/",
         httpOnly: true,
         maxAge: 1440,
-        secure: Deno.env.get("DENO_ENV") === "production",
+        secure: isProd(),
       },
     }),
   );
