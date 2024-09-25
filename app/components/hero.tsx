@@ -20,6 +20,15 @@ export const Hero = () => {
               <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
                 簡易投票システム 2024
               </h1>
+              <p className="mt-6 text-lg leading-8 text-gray-300">
+                <a
+                  href="https://github.com/5t111111/voting-2024"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  https://github.com/5t111111/voting-2024
+                </a>
+              </p>
             </div>
           </div>
         </div>
