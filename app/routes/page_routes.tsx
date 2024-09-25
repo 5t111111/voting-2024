@@ -23,6 +23,27 @@ function checkIfVoted(votedAt: number | undefined): boolean {
   return diff < 10000;
 }
 
+function createForm(
+  id: string,
+  label: string,
+  csrfToken: string,
+  voted: boolean,
+) {
+  return (
+    <>
+      <p>
+        <span>{label}</span>に投票する
+      </p>
+      {voted ? <p>投票済み</p> : html`
+        <form action="/vote" method="post" onSubmit=check>
+          <input type="hidden" name="id" value="${id}" />
+          <input type="hidden" name="_csrf" value=${csrfToken} />
+          <button type="submit">投票</button>
+        </form>`}
+    </>
+  );
+}
+
 app.get("/", async (c) => {
   const session = c.get("session");
 
@@ -58,39 +79,9 @@ app.get("/", async (c) => {
         </script>
       `}
       <ul>
-        <li>
-          <p>
-            <span>サーモン</span>に投票する
-          </p>
-          {voted ? <p>投票済み</p> : html`
-            <form action="/vote" method="post" onSubmit=check>
-              <input type="hidden" name="id" value="salmon" />
-              <input type="hidden" name="_csrf" value=${csrfToken} />
-              <button type="submit">投票</button>
-            </form>`}
-        </li>
-        <li>
-          <p>
-            <span>ツナ</span>に投票する
-          </p>
-          {voted ? <p>投票済み</p> : html`
-            <form action="/vote" method="post" onSubmit=check>
-              <input type="hidden" name="id" value="tuna" />
-              <input type="hidden" name="_csrf" value=${csrfToken} />
-              <button type="submit">投票</button>
-            </form>`}
-        </li>
-        <li>
-          <p>
-            <span>トラウト</span>に投票する
-          </p>
-          {voted ? <p>投票済み</p> : html`
-            <form action="/vote" method="post" onSubmit=check>
-              <input type="hidden" name="id" value="trout" />
-              <input type="hidden" name="_csrf" value=${csrfToken} />
-              <button type="submit">投票</button>
-            </form>`}
-        </li>
+        <li>{createForm("salmon", "サーモン", csrfToken, voted)}</li>
+        <li>{createForm("tuna", "ツナ", csrfToken, voted)}</li>
+        <li>{createForm("trout", "トラウト", csrfToken, voted)}</li>
       </ul>
       <h2>以下テスト用</h2>
       <p>10秒間に1回のみ投票可能です</p>
