@@ -44,7 +44,8 @@ export const buildServerApp = () => {
         sameSite: "Lax",
         path: "/",
         httpOnly: true,
-        maxAge: 10,
+        maxAge: 1440,
+        // TODO: secure: true,
       },
     }),
   );
