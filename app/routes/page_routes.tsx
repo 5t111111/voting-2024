@@ -15,12 +15,12 @@ const app = new Hono<Application>();
 app.get("/", async (c) => {
   const session = c.get("session");
 
-  // テスト用
+  // -- テスト用
   const diff = new Date().getTime() - (session.get("voted_at") as number);
+  const voteResults = await getAllItems();
+  // --
 
   const voted = checkIfVoted(session.get("voted_at") as number);
-
-  const voteResults = await getAllItems();
 
   // 簡易 CSRF 対策のためのトークンをセッションにセット
   const csrfToken = Math.random().toString(36).slice(-8);
@@ -74,6 +74,7 @@ app.post("/vote", async (c) => {
   // 投票済みであれば投票できない
   // すでに UI 側でチェックしているのでここではシンプルに 403 を返す
   const voted = checkIfVoted(session.get("voted_at") as number);
+
   if (voted) {
     return new Response("You have already voted.", { status: 403 });
   }
