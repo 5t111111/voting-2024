@@ -45,7 +45,7 @@ export const buildServerApp = () => {
         path: "/",
         httpOnly: true,
         maxAge: 1440,
-        // TODO: secure: true,
+        secure: Deno.env.get("DENO_ENV") === "production",
       },
     }),
   );
