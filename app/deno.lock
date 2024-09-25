@@ -1,29 +1,31 @@
 {
-  "version": "4",
-  "specifiers": {
-    "jsr:@hono/hono@4.6.3": "4.6.3",
-    "npm:hono@4": "4.6.2",
-    "npm:iron-webcrypto@0.10.1": "0.10.1",
-    "npm:zod@3.23.8": "3.23.8"
-  },
-  "jsr": {
-    "@hono/hono@4.6.3": {
-      "integrity": "a1f5a18cd12a0db54755b0461dd5a4e2d93a6f85403073eb710103eacc42daf3"
-    }
-  },
-  "npm": {
-    "hono@4.6.2": {
-      "integrity": "sha512-v+39817TgAhetmHUEli8O0uHDmxp2Up3DnhS4oUZXOl5IQ9np9tYtldd42e5zgdLVS0wsOoXQNZ6mx+BGmEvCA=="
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "jsr:@hono/hono@4.6.3": "jsr:@hono/hono@4.6.3",
+      "npm:hono@^4.0.0": "npm:hono@4.6.3",
+      "npm:iron-webcrypto@0.10.1": "npm:iron-webcrypto@0.10.1",
+      "npm:zod@3.23.8": "npm:zod@3.23.8"
     },
-    "iron-webcrypto@0.10.1": {
-      "integrity": "sha512-QGOS8MRMnj/UiOa+aMIgfyHcvkhqNUsUxb1XzskENvbo+rEfp6TOwqd1KPuDzXC4OnGHcMSVxDGRoilqB8ViqA=="
+    "jsr": {
+      "@hono/hono@4.6.3": {
+        "integrity": "a1f5a18cd12a0db54755b0461dd5a4e2d93a6f85403073eb710103eacc42daf3"
+      }
     },
-    "zod@3.23.8": {
-      "integrity": "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g=="
+    "npm": {
+      "hono@4.6.3": {
+        "integrity": "sha512-0LeEuBNFeSHGqZ9sNVVgZjB1V5fmhkBSB0hZrpqStSMLOWgfLy0dHOvrjbJh0H2khsjet6rbHfWTHY0kpYThKQ==",
+        "dependencies": {}
+      },
+      "iron-webcrypto@0.10.1": {
+        "integrity": "sha512-QGOS8MRMnj/UiOa+aMIgfyHcvkhqNUsUxb1XzskENvbo+rEfp6TOwqd1KPuDzXC4OnGHcMSVxDGRoilqB8ViqA==",
+        "dependencies": {}
+      },
+      "zod@3.23.8": {
+        "integrity": "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==",
+        "dependencies": {}
+      }
     }
-  },
-  "redirects": {
-    "https://deno.land/x/hono_sessions/mod.ts": "https://deno.land/x/hono_sessions@v0.5.8/mod.ts"
   },
   "remote": {
     "https://deno.land/x/hono_sessions@v0.5.8/deps.ts": "a86ee9f6d96c0dcc80380eaa3d1cef13ff972a56003d8e1d7f461cc32554fa34",
