@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { html } from "hono/html";
 import {
   type VoteRequest,
   voteRequestSchema,
@@ -8,86 +7,10 @@ import { getAllItems, incrementCount } from "../database/kv.ts";
 import type { Application } from "../types/index.ts";
 import { checkIfVoted } from "../utils/check_if_voted.ts";
 import { Hero } from "../components/hero.tsx";
+import { Card } from "../components/card.tsx";
+import { Layout } from "../layouts/layout.ts";
 
 const app = new Hono<Application>();
-
-interface SiteData {
-  title: string;
-  description: string;
-  // deno-lint-ignore no-explicit-any
-  children?: any;
-}
-
-function Layout(props: SiteData) {
-  return html`
-    <html lang="ja">
-      <head>
-        <meta charset="UTF-8">
-        <title>${props.title}</title>
-        <meta name="description" content="${props.description}">
-        <head prefix="og: http://ogp.me/ns#">
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="${props.title}">
-        <!-- <meta property="og:image" content="dummy"> -->
-        <script src="https://cdn.tailwindcss.com"></script>
-      </head>
-      <body>
-        <div class="container mx-auto px-4 pb-8 max-w-4xl">
-          ${props.children}
-        </div>
-      </body>
-    </html>
-  `;
-}
-
-function createForm(
-  id: string,
-  label: string,
-  csrfToken: string,
-  voted: boolean,
-) {
-  return (
-    <>
-      <img
-        src="https://placehold.co/400x400"
-        alt={label}
-        class="rounded-full h-64 w-64"
-      />
-      <p class="text-center mt-4 font-bold">
-        <span class="label">{label}</span>
-      </p>
-      {voted
-        ? (
-          <div class="text-center mt-4">
-            <button
-              type="button"
-              class="rounded-md bg-gray-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm"
-              disabled
-            >
-              投票ありがとうございました
-            </button>
-          </div>
-        )
-        : (
-          <form
-            action="/vote"
-            method="post"
-            onsubmit="confirmVoting(event)"
-            class="text-center mt-4"
-          >
-            <input type="hidden" name="id" value={id} />
-            <input type="hidden" name="_csrf" value={csrfToken} />
-            <button
-              type="submit"
-              class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              投票する
-            </button>
-          </form>
-        )}
-    </>
-  );
-}
 
 app.get("/", async (c) => {
   const session = c.get("session");
@@ -107,24 +30,31 @@ app.get("/", async (c) => {
   return c.render(
     <Layout title="2024 投票ページ" description="2024年度版の投票ページです。">
       <Hero />
-      {html`
-        <script>
-          function confirmVoting(event) {
-            event.preventDefault();
-            const form = event.target;
-            const spanElement = form.previousElementSibling.querySelector('.label');
-            const name = spanElement.textContent;
-
-            if (window.confirm(name + 'に投票します。よろしいですか？')) {
-              form.submit();
-            }
-          }
-        </script>
-      `}
       <ul class="flex flex-wrap justify-between mt-16">
-        <li>{createForm("salmon", "サーモン", csrfToken, voted)}</li>
-        <li>{createForm("tuna", "ツナ", csrfToken, voted)}</li>
-        <li>{createForm("trout", "トラウト", csrfToken, voted)}</li>
+        <li>
+          <Card
+            id="salmon"
+            label="サーモン"
+            csrfToken={csrfToken}
+            voted={voted}
+          />
+        </li>
+        <li>
+          <Card
+            id="tuna"
+            label="ツナ"
+            csrfToken={csrfToken}
+            voted={voted}
+          />
+        </li>
+        <li>
+          <Card
+            id="trout"
+            label="トラウト"
+            csrfToken={csrfToken}
+            voted={voted}
+          />
+        </li>
       </ul>
       <hr class="mt-12" />
       <h2 class="text-lg mt-12">以下テスト用</h2>
