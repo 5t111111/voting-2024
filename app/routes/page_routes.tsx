@@ -62,6 +62,7 @@ function createForm(
             <button
               type="button"
               class="rounded-md bg-gray-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm"
+              disabled
             >
               投票ありがとうございました
             </button>
