@@ -6,17 +6,3 @@ export const isDenoDeploy = () => {
 
   return false;
 };
-
-export const isProd = () => {
-  // Deno Deploy 判定されたら本番判定
-  if (isDenoDeploy()) {
-    return true;
-  }
-
-  // DENO_ENV が production であれば本番判定
-  if (Deno.env.get("DENO_ENV") === "production") {
-    return true;
-  }
-
-  return false;
-};
