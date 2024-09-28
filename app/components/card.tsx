@@ -7,6 +7,7 @@ import { css } from "../static/styled-system/css/index.mjs";
 type Props = {
   id: string;
   label: string;
+  image: string;
   csrfToken: string;
   voted: boolean;
 };
@@ -52,7 +53,7 @@ const styles = {
   }),
 };
 
-export const Card: FC<Props> = ({ id, label, csrfToken, voted }) => {
+export const Card: FC<Props> = ({ id, label, image, csrfToken, voted }) => {
   return (
     <div>
       {html`
@@ -68,7 +69,7 @@ export const Card: FC<Props> = ({ id, label, csrfToken, voted }) => {
         </script>
       `}
       <img
-        src="https://placehold.co/400x400"
+        src={image}
         alt={label}
         class={styles.avatarIcon}
       />

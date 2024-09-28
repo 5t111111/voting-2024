@@ -6,6 +6,7 @@ import { Card } from "./card.tsx";
 import { css } from "../static/styled-system/css/index.mjs";
 import { container } from "../static/styled-system/patterns/container.mjs";
 import { Vote } from "../schemas/vote.ts";
+import { data } from "../data.ts";
 
 const styles = {
   candidateList: css({
@@ -49,30 +50,17 @@ export const HomePage: FC<Props> = (
       <Hero />
       <div class={container()}>
         <ul class={styles.candidateList}>
-          <li>
-            <Card
-              id="salmon"
-              label="サーモン"
-              csrfToken={csrfToken}
-              voted={voted}
-            />
-          </li>
-          <li>
-            <Card
-              id="tuna"
-              label="ツナ"
-              csrfToken={csrfToken}
-              voted={voted}
-            />
-          </li>
-          <li>
-            <Card
-              id="trout"
-              label="トラウト"
-              csrfToken={csrfToken}
-              voted={voted}
-            />
-          </li>
+          {data.map((item) => (
+            <li>
+              <Card
+                id={item.id}
+                label={item.name}
+                image={item.image}
+                csrfToken={csrfToken}
+                voted={voted}
+              />
+            </li>
+          ))}
         </ul>
       </div>
       <div class={styles.testArea}>
