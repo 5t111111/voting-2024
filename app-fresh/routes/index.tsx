@@ -1,9 +1,30 @@
+import { FreshContext, Handlers, PageProps } from "$fresh/server.ts";
+import { setCookie } from "@std/http/cookie";
+
 import { Card } from "../components/Card.tsx";
 import { Hero } from "../components/Hero.tsx";
-import { data } from "../data.ts";
+import { candidates } from "../data.ts";
 
-export default function Home() {
-  const csrfToken = "test";
+export const handler: Handlers = {
+  async GET(_req: Request, ctx: FreshContext) {
+    // 簡易 CSRF 対策のためのトークンをセッションにセット
+    const csrfToken = Math.random().toString(36).slice(-8);
+    const resp = await ctx.render({ csrfToken });
+    setCookie(resp.headers, {
+      name: "_csrf",
+      value: csrfToken,
+      maxAge: 120,
+      sameSite: "Lax",
+      path: "/",
+      secure: true,
+    });
+
+    return resp;
+  },
+};
+
+export default function Home({ data }: PageProps) {
+  const csrfToken = data.csrfToken;
   const voted = false;
 
   return (
@@ -11,12 +32,12 @@ export default function Home() {
       <Hero />
       <div class="container mx-auto px-4">
         <ul class="flex flex-wrap justify-between mt-24">
-          {data.map((item) => (
+          {candidates.map((candidate) => (
             <li>
               <Card
-                id={item.id}
-                label={item.name}
-                image={item.image}
+                id={candidate.id}
+                label={candidate.name}
+                image={candidate.image}
                 csrfToken={csrfToken}
                 voted={voted}
               />

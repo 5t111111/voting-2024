@@ -1,10 +1,10 @@
-type Data = {
+type Candidate = {
   id: string;
   name: string;
   image: string;
 };
 
-export const data: Data[] = [
+export const candidates: Candidate[] = [
   {
     id: "salmon",
     name: "サーモン",
