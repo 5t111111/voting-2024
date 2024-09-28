@@ -4,7 +4,7 @@ import { Hero } from "./hero.tsx";
 import { Card } from "./card.tsx";
 // @deno-types="../static/styled-system/css/index.d.mts"
 import { css } from "../static/styled-system/css/index.mjs";
-import { container } from "../styled-system/patterns/container.mjs";
+import { container } from "../static/styled-system/patterns/container.mjs";
 import { Vote } from "../schemas/vote.ts";
 
 const styles = {
