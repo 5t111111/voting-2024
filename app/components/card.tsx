@@ -2,7 +2,7 @@ import type { FC } from "hono/jsx";
 import { html } from "hono/html";
 
 // @deno-types="../static/styled-system/css/index.d.mts"
-import { css } from "../static/styled-system/css/index.mjs";
+import { css, Styles } from "../static/styled-system/css/index.mjs";
 
 type Props = {
   id: string;
@@ -12,7 +12,7 @@ type Props = {
   voted: boolean;
 };
 
-const buttonStyle = {
+const buttonStyle: Styles = {
   rounded: "lg",
   px: 3,
   py: 2,

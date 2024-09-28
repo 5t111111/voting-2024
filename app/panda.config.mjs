@@ -20,4 +20,6 @@ export default defineConfig({
 
   // Deno always requires file extensions
   forceConsistentTypeExtension: true,
+
+  minify: true,
 });
