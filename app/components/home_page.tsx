@@ -1,5 +1,5 @@
 import { FC } from "hono/jsx";
-import { Layout } from "../layouts/layout.ts";
+import { Layout } from "./layout.ts";
 import { Hero } from "./hero.tsx";
 import { Card } from "./card.tsx";
 // @deno-types="../static/styled-system/css/index.d.mts"
