@@ -44,6 +44,7 @@ const styles = {
   }),
 
   voteButton: css(buttonStyle, {
+    cursor: "pointer",
     bg: "indigo.600",
     _hover: {
       bg: "indigo.500",
