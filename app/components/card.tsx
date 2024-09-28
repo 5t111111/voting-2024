@@ -1,11 +1,53 @@
 import type { FC } from "hono/jsx";
 import { html } from "hono/html";
 
+// @deno-types="../static/styled-system/css/index.d.mts"
+import { css } from "../static/styled-system/css/index.mjs";
+
 type Props = {
   id: string;
   label: string;
   csrfToken: string;
   voted: boolean;
+};
+
+const buttonStyle = {
+  rounded: "lg",
+  px: 3,
+  py: 2,
+  fontWeight: "semibold",
+  color: "white",
+  shadow: "sm",
+};
+
+const styles = {
+  avatarIcon: css({
+    rounded: "full",
+    h: 64,
+    w: 64,
+  }),
+
+  name: css({
+    fontSize: "lg",
+    fontWeight: "bold",
+    textAlign: "center",
+  }),
+
+  voteButtonArea: css({
+    textAlign: "center",
+    mt: 4,
+  }),
+
+  disabledVoteButton: css(buttonStyle, {
+    bg: "gray.400",
+  }),
+
+  voteButton: css(buttonStyle, {
+    bg: "indigo.600",
+    _hover: {
+      bg: "indigo.500",
+    },
+  }),
 };
 
 export const Card: FC<Props> = ({ id, label, csrfToken, voted }) => {
@@ -26,17 +68,17 @@ export const Card: FC<Props> = ({ id, label, csrfToken, voted }) => {
       <img
         src="https://placehold.co/400x400"
         alt={label}
-        class="rounded-full h-64 w-64"
+        class={styles.avatarIcon}
       />
-      <p class="text-center mt-4 font-bold">
+      <p class={styles.name}>
         <span class="label">{label}</span>
       </p>
       {voted
         ? (
-          <div class="text-center mt-4">
+          <div class={styles.voteButtonArea}>
             <button
               type="button"
-              class="rounded-md bg-gray-400 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm"
+              class={styles.disabledVoteButton}
               disabled
             >
               投票ありがとうございました
@@ -48,13 +90,13 @@ export const Card: FC<Props> = ({ id, label, csrfToken, voted }) => {
             action="/vote"
             method="post"
             onsubmit={`confirmVoting_${id}(event)`}
-            class="text-center mt-4"
+            class={styles.voteButtonArea}
           >
             <input type="hidden" name="id" value={id} />
             <input type="hidden" name="_csrf" value={csrfToken} />
             <button
               type="submit"
-              class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              class={styles.voteButton}
             >
               投票する
             </button>

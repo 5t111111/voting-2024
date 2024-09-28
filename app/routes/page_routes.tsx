@@ -7,9 +7,7 @@ import {
 import { getAllItems, incrementCount } from "../database/kv.ts";
 import type { Application } from "../types/index.ts";
 import { checkIfVoted } from "../utils/check_if_voted.ts";
-import { Hero } from "../components/hero.tsx";
-import { Card } from "../components/card.tsx";
-import { Layout } from "../layouts/layout.ts";
+import { HomePage } from "../components/home_page.tsx";
 
 const app = new Hono<Application>();
 
@@ -29,45 +27,12 @@ app.get("/", async (c) => {
   // console.log("csrf_token: GET", csrfToken);
 
   return c.render(
-    <Layout title="2024 投票ページ" description="2024年度版の投票ページです。">
-      <Hero />
-      <div class={container()}>
-        <ul class="flex flex-wrap justify-between mt-16">
-          <li>
-            <Card
-              id="salmon"
-              label="サーモン"
-              csrfToken={csrfToken}
-              voted={voted}
-            />
-          </li>
-          <li>
-            <Card
-              id="tuna"
-              label="ツナ"
-              csrfToken={csrfToken}
-              voted={voted}
-            />
-          </li>
-          <li>
-            <Card
-              id="trout"
-              label="トラウト"
-              csrfToken={csrfToken}
-              voted={voted}
-            />
-          </li>
-        </ul>
-      </div>
-      <hr class="mt-12" />
-      <h2 class="text-lg mt-12">以下テスト用</h2>
-      <p class="mt-4 text-sm">60秒間に1回のみ投票可能です</p>
-      <p class="mt-4">
-        {voted ? `❌ 投票済みです ${diff / 1000}秒前` : "⭕️ 投票できます"}
-      </p>
-      <h3 class="mt-4 font-bold">投票結果</h3>
-      <pre class="mt-2">{JSON.stringify(voteResults, null, 2)}</pre>
-    </Layout>,
+    <HomePage
+      voted={voted}
+      csrfToken={csrfToken}
+      diff={diff}
+      voteResults={voteResults}
+    />,
   );
 });
 
