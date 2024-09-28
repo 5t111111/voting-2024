@@ -1,15 +1,24 @@
 {
-  "deno.enablePaths": ["./app"],
+  "deno.enablePaths": [
+    "./app",
+    "./app-fresh"
+  ],
   "deno.enable": true,
   "deno.lint": true,
   "editor.formatOnSave": true,
-  "[typescript]": {
-    "editor.defaultFormatter": "denoland.vscode-deno"
-  },
   "[typescriptreact]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
-  "[json]": {
+  "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
-  }
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "css.customData": [
+    ".vscode/tailwind.json"
+  ]
 }
