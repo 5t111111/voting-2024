@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { container } from "../static/styled-system/patterns/index.mjs";
 import {
   type VoteRequest,
   voteRequestSchema,

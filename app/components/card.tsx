@@ -31,6 +31,7 @@ const styles = {
     fontSize: "lg",
     fontWeight: "bold",
     textAlign: "center",
+    mt: 4,
   }),
 
   voteButtonArea: css({
