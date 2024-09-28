@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { container } from "../static/styled-system/patterns/index.mjs";
 import {
   type VoteRequest,
   voteRequestSchema,
@@ -30,32 +31,34 @@ app.get("/", async (c) => {
   return c.render(
     <Layout title="2024 投票ページ" description="2024年度版の投票ページです。">
       <Hero />
-      <ul class="flex flex-wrap justify-between mt-16">
-        <li>
-          <Card
-            id="salmon"
-            label="サーモン"
-            csrfToken={csrfToken}
-            voted={voted}
-          />
-        </li>
-        <li>
-          <Card
-            id="tuna"
-            label="ツナ"
-            csrfToken={csrfToken}
-            voted={voted}
-          />
-        </li>
-        <li>
-          <Card
-            id="trout"
-            label="トラウト"
-            csrfToken={csrfToken}
-            voted={voted}
-          />
-        </li>
-      </ul>
+      <div class={container()}>
+        <ul class="flex flex-wrap justify-between mt-16">
+          <li>
+            <Card
+              id="salmon"
+              label="サーモン"
+              csrfToken={csrfToken}
+              voted={voted}
+            />
+          </li>
+          <li>
+            <Card
+              id="tuna"
+              label="ツナ"
+              csrfToken={csrfToken}
+              voted={voted}
+            />
+          </li>
+          <li>
+            <Card
+              id="trout"
+              label="トラウト"
+              csrfToken={csrfToken}
+              voted={voted}
+            />
+          </li>
+        </ul>
+      </div>
       <hr class="mt-12" />
       <h2 class="text-lg mt-12">以下テスト用</h2>
       <p class="mt-4 text-sm">60秒間に1回のみ投票可能です</p>

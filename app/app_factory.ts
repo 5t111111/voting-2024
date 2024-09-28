@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { serveStatic } from "hono/deno";
 import { CookieStore, Session, sessionMiddleware } from "hono_sessions";
 
 import adminApiRoutes from "./routes/admin_api_routes.ts";
@@ -49,6 +50,8 @@ export const buildServerApp = () => {
       },
     }),
   );
+
+  app.use("/static/*", serveStatic({ root: "./" }));
 
   app.route("/", pageRoutes);
   app.route("/api/admin", adminApiRoutes);

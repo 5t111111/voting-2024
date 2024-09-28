@@ -18,12 +18,10 @@ export const Layout = (props: SiteData) => {
         <meta property="og:type" content="website">
         <meta property="og:title" content="${props.title}">
         <!-- <meta property="og:image" content="dummy"> -->
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="/static/styled-system/styles.css" />
       </head>
       <body>
-        <div class="container mx-auto px-4 pb-8 max-w-4xl">
-          ${props.children}
-        </div>
+        ${props.children}
       </body>
     </html>
   `;
