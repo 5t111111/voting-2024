@@ -6,8 +6,9 @@
     "zod": "npm:zod@3.23.8"
   },
   "tasks": {
-    "dev": "deno run -A --unstable-kv --env --watch main.ts",
-    "panda": "deno run -A npm:@pandacss/dev --watch"
+    "start": "deno run -A --unstable-kv --env main.ts",
+    "dev": "deno run -A npm:@pandacss/dev --watch & deno run -A --unstable-kv --env --watch main.ts",
+    "build:css": "deno run -A npm:@pandacss/dev"
   },
   "compilerOptions": {
     "jsx": "precompile",
