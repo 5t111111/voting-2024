@@ -7,6 +7,7 @@ import { getAllItems, incrementCount } from "../database/kv.ts";
 import type { Application } from "../types/index.ts";
 import { checkIfVoted } from "../utils/check_if_voted.ts";
 import { Home } from "../pages/Home.tsx";
+import { generateCsrfToken } from "../utils/csrf.ts";
 
 const app = new Hono<Application>();
 
@@ -21,7 +22,7 @@ app.get("/", async (c) => {
   const voted = checkIfVoted(session.get("voted_at") as number);
 
   // 簡易 CSRF 対策のためのトークンをセッションにセット
-  const csrfToken = Math.random().toString(36).slice(-8);
+  const csrfToken = generateCsrfToken();
   session.set("csrf_token", csrfToken);
   // console.log("csrf_token: GET", csrfToken);
 

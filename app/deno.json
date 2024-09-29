@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@std/encoding": "jsr:@std/encoding@^1.0.5",
     "hono": "jsr:@hono/hono@4.6.3",
     "hono_sessions": "https://deno.land/x/hono_sessions@v0.5.8/mod.ts",
     "tailwindcss": "npm:tailwindcss@^3.4.13",
