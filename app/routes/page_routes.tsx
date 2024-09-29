@@ -6,7 +6,7 @@ import {
 import { getAllItems, incrementCount } from "../database/kv.ts";
 import type { Application } from "../types/index.ts";
 import { checkIfVoted } from "../utils/check_if_voted.ts";
-import { HomePage } from "../components/home_page.tsx";
+import { Home } from "../pages/Home.tsx";
 
 const app = new Hono<Application>();
 
@@ -26,7 +26,7 @@ app.get("/", async (c) => {
   // console.log("csrf_token: GET", csrfToken);
 
   return c.render(
-    <HomePage
+    <Home
       voted={voted}
       csrfToken={csrfToken}
       diff={diff}

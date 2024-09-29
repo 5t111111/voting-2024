@@ -1,14 +1,12 @@
 {
   "imports": {
-    "@pandacss/dev": "npm:@pandacss/dev@^0.46.1",
     "hono": "jsr:@hono/hono@4.6.3",
     "hono_sessions": "https://deno.land/x/hono_sessions@v0.5.8/mod.ts",
+    "tailwindcss": "npm:tailwindcss@^3.4.13",
     "zod": "npm:zod@3.23.8"
   },
   "tasks": {
-    "start": "deno run -A --unstable-kv --env main.ts",
-    "dev": "deno run -A npm:@pandacss/dev --watch & deno run -A --unstable-kv --env --watch main.ts",
-    "build:css": "deno run -A npm:@pandacss/dev"
+    "start": "deno run -A npm:tailwindcss -i ./input.css -o ./static/styles.css --minify --watch & deno run -A --unstable-kv --env --watch main.ts"
   },
   "compilerOptions": {
     "jsx": "precompile",

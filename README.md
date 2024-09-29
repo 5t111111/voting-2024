@@ -7,5 +7,5 @@ Dev Container で開いてください。
 以下で開発サーバーを起動します。
 
 ```bash
-deno task dev
+deno task start
 ```

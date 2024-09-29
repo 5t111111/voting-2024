@@ -24,7 +24,7 @@ jobs:
           deno-version: v1.x
 
       - name: Build step
-        run: "cd app && deno run -A npm:@pandacss/dev"
+        run: "cd app && "deno run -A npm:tailwindcss -i ./input.css -o ./static/styles.css --minify"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1

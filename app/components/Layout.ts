@@ -18,7 +18,7 @@ export const Layout = (props: SiteData) => {
         <meta property="og:type" content="website">
         <meta property="og:title" content="${props.title}">
         <!-- <meta property="og:image" content="dummy"> -->
-        <link rel="stylesheet" href="/static/styled-system/styles.css" />
+        <link rel="stylesheet" href="/static/styles.css" />
         <link rel="icon" href="/static/favicon.png" sizes="32x32">
       </head>
       <body>
