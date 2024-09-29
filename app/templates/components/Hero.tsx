@@ -1,4 +1,6 @@
-export const Hero = () => {
+import { FC } from "hono/jsx";
+
+export const Hero: FC = () => {
   return (
     <div class="bg-indigo-800 p-8">
       <h1 class="text-4xl font-bold text-white text-center">

@@ -1,9 +1,9 @@
 import { FC } from "hono/jsx";
-import { Layout } from "../components/Layout.ts";
+import { Layout } from "../layouts/Layout.ts";
+import { Vote } from "../../schemas/vote.ts";
+import { data } from "../../data.ts";
 import { Hero } from "../components/Hero.tsx";
 import { Card } from "../components/Card.tsx";
-import { Vote } from "../schemas/vote.ts";
-import { data } from "../data.ts";
 
 type Props = {
   voted: boolean;

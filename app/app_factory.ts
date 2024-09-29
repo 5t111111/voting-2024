@@ -4,6 +4,7 @@ import { CookieStore, Session, sessionMiddleware } from "hono_sessions";
 
 import adminApiRoutes from "./routes/admin_api_routes.ts";
 import pageRoutes from "./routes/page_routes.tsx";
+import { adminApiAuth } from "./middlewares/admin_api_auth.ts";
 
 export type GlobalAppContext = {
   Variables: {
@@ -48,6 +49,8 @@ export const buildApp = () => {
   app.use("/static/*", serveStatic({ root: "./" }));
 
   app.route("/", pageRoutes);
+
+  app.use("/api/admin/*", adminApiAuth);
   app.route("/api/admin", adminApiRoutes);
 
   return app;

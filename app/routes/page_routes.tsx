@@ -5,10 +5,10 @@ import {
 } from "../schemas/vote_request.ts";
 import { getAllItems, incrementCount } from "../database/kv.ts";
 import { checkIfVoted } from "../utils/check_if_voted.ts";
-import { Home } from "../pages/Home.tsx";
 import { formDataToJson } from "../middlewares/formdata_to_json.ts";
 import { checkCsrfToken, generateCsrfToken } from "../middlewares/csrf.ts";
 import { GlobalAppContext } from "../app_factory.ts";
+import { Home } from "../templates/pages/Home.tsx";
 
 const app = new Hono<GlobalAppContext>();
 
