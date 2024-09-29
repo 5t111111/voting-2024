@@ -11,6 +11,10 @@ import { generateCsrfToken } from "../utils/csrf.ts";
 
 const app = new Hono<Application>();
 
+/**
+ * GET /
+ * ホームページを表示する
+ */
 app.get("/", async (c) => {
   const session = c.get("session");
 
@@ -36,36 +40,27 @@ app.get("/", async (c) => {
   );
 });
 
+/**
+ * POST /vote
+ * 投票を行う
+ */
 app.post("/vote", async (c) => {
-  const session = c.get("session");
-
-  // 投票済みであれば投票できない
-  // すでに UI 側でチェックしているのでここではシンプルに 403 を返す
-  const voted = checkIfVoted(session.get("voted_at") as number);
-
-  if (voted) {
-    return new Response("You have already voted.", { status: 403 });
-  }
-
   let voteRequest: VoteRequest;
 
   try {
     const formData = await c.req.formData();
-    // const data = await c.req.json();
-    // console.log(formData);
     voteRequest = voteRequestSchema.parse(
       // FormData からオブジェクトに変換する
       Object.fromEntries(formData.entries()),
     );
-  } catch (_error) {
-    console.error(_error);
-    return new Response("Requested JSON is not valid.", {
+  } catch (error) {
+    console.error(error);
+    return new Response("Requested data is not valid.", {
       status: 400,
     });
   }
 
-  // console.log("csrf_token: IN FORMDATA:", voteRequest._csrf);
-  // console.log("csrf_token: IN SESSION :", session.get("csrf_token"));
+  const session = c.get("session");
 
   // CSRF トークンのチェック
   if (
@@ -73,6 +68,14 @@ app.post("/vote", async (c) => {
     voteRequest._csrf !== session.get("csrf_token")
   ) {
     return new Response("CSRF token is invalid.", { status: 403 });
+  }
+
+  // 投票済みであれば投票できない
+  // すでに UI 側でチェックしているのでここではシンプルに 403 を返す
+  const voted = checkIfVoted(session.get("voted_at") as number);
+
+  if (voted) {
+    return new Response("You have already voted.", { status: 403 });
   }
 
   // 投票処理
