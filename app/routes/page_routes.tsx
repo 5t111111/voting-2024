@@ -8,6 +8,8 @@ import type { Application } from "../types/index.ts";
 import { checkIfVoted } from "../utils/check_if_voted.ts";
 import { Home } from "../pages/Home.tsx";
 import { generateCsrfToken } from "../utils/csrf.ts";
+import { formDataToJson } from "../middlewares/formdata_to_json.ts";
+import { checkCsrf } from "../middlewares/check_csrf.ts";
 
 const app = new Hono<Application>();
 
@@ -44,15 +46,11 @@ app.get("/", async (c) => {
  * POST /vote
  * 投票を行う
  */
-app.post("/vote", async (c) => {
+app.post("/vote", formDataToJson, checkCsrf, async (c) => {
   let voteRequest: VoteRequest;
 
   try {
-    const formData = await c.req.formData();
-    voteRequest = voteRequestSchema.parse(
-      // FormData からオブジェクトに変換する
-      Object.fromEntries(formData.entries()),
-    );
+    voteRequest = voteRequestSchema.parse(c.var.inputData);
   } catch (error) {
     console.error(error);
     return new Response("Requested data is not valid.", {
@@ -61,14 +59,6 @@ app.post("/vote", async (c) => {
   }
 
   const session = c.get("session");
-
-  // CSRF トークンのチェック
-  if (
-    !session.get("csrf_token") ||
-    voteRequest._csrf !== session.get("csrf_token")
-  ) {
-    return new Response("CSRF token is invalid.", { status: 403 });
-  }
 
   // 投票済みであれば投票できない
   // すでに UI 側でチェックしているのでここではシンプルに 403 を返す
@@ -79,7 +69,7 @@ app.post("/vote", async (c) => {
   }
 
   // 投票処理
-  await incrementCount(voteRequest.id.toString());
+  await incrementCount(voteRequest.id);
 
   // session の voted_at にタイムスタンプをセットする
   c.get("session").set("voted_at", new Date().getTime());

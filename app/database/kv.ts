@@ -34,7 +34,7 @@ type Item = z.infer<typeof itemSchema>;
  * 同時のタイミングで投票された場合を考慮して、KV の atomic を利用してトランザクション化しており、
  * トランザクションが失敗した場合は成功するまでリトライするようにしている (最大10回)
  */
-export async function incrementCount(id: string) {
+export async function incrementCount(id: Vote["id"]) {
   // データが未登録の場合は先に登録する
   await createItemIfNotExist(id);
 
