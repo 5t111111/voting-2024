@@ -4,11 +4,12 @@ import { setCookie } from "@std/http/cookie";
 import { Card } from "../components/Card.tsx";
 import { Hero } from "../components/Hero.tsx";
 import { candidates } from "../data.ts";
+import { generateCsrfToken } from "../utils/csrf.ts";
 
 export const handler: Handlers = {
   async GET(_req: Request, ctx: FreshContext) {
     // 簡易 CSRF 対策のためのトークンをセッションにセット
-    const csrfToken = Math.random().toString(36).slice(-8);
+    const csrfToken = generateCsrfToken();
     const resp = await ctx.render({ csrfToken });
     setCookie(resp.headers, {
       name: "_csrf",
