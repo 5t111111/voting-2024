@@ -4,20 +4,19 @@ import {
   voteRequestSchema,
 } from "../schemas/vote_request.ts";
 import { getAllItems, incrementCount } from "../database/kv.ts";
-import type { Application } from "../types/index.ts";
 import { checkIfVoted } from "../utils/check_if_voted.ts";
 import { Home } from "../pages/Home.tsx";
-import { generateCsrfToken } from "../utils/csrf.ts";
 import { formDataToJson } from "../middlewares/formdata_to_json.ts";
-import { checkCsrf } from "../middlewares/check_csrf.ts";
+import { checkCsrfToken, generateCsrfToken } from "../middlewares/csrf.ts";
+import { GlobalAppContext } from "../app_factory.ts";
 
-const app = new Hono<Application>();
+const app = new Hono<GlobalAppContext>();
 
 /**
  * GET /
  * ホームページを表示する
  */
-app.get("/", async (c) => {
+app.get("/", generateCsrfToken, async (c) => {
   const session = c.get("session");
 
   // -- テスト用
@@ -27,10 +26,7 @@ app.get("/", async (c) => {
 
   const voted = checkIfVoted(session.get("voted_at") as number);
 
-  // 簡易 CSRF 対策のためのトークンをセッションにセット
-  const csrfToken = generateCsrfToken();
-  session.set("csrf_token", csrfToken);
-  // console.log("csrf_token: GET", csrfToken);
+  const csrfToken = c.var.csrfToken;
 
   return c.render(
     <Home
@@ -46,7 +42,7 @@ app.get("/", async (c) => {
  * POST /vote
  * 投票を行う
  */
-app.post("/vote", formDataToJson, checkCsrf, async (c) => {
+app.post("/vote", formDataToJson, checkCsrfToken, async (c) => {
   let voteRequest: VoteRequest;
 
   try {
