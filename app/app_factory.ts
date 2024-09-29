@@ -13,6 +13,12 @@ export type GlobalAppContext = {
   };
 };
 
+const sessionEncryptionKey = Deno.env.get("SESSION_ENCRYPTION_KEY");
+
+if (!sessionEncryptionKey) {
+  throw new Error("SESSION_ENCRYPTION_KEY is not set");
+}
+
 /**
  * Hono アプリケーションのインスタンスを生成する
  * @returns Hono アプリケーションのインスタンス
@@ -21,13 +27,6 @@ export const buildApp = () => {
   const app = new Hono<GlobalAppContext>();
 
   const store = new CookieStore();
-
-  let sessionEncryptionKey = Deno.env.get("SESSION_ENCRYPTION_KEY");
-
-  if (!sessionEncryptionKey) {
-    // throw new Error("SESSION_ENCRYPTION_KEY is not set");
-    sessionEncryptionKey = "very-very-very-very-very-very-very-very-secret";
-  }
 
   app.use(
     "*",
