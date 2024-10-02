@@ -3,7 +3,7 @@ import { getAllItems } from "../database/kv.ts";
 
 const app = new Hono();
 
-app.get("/get-all-results", async (c) => {
+app.get("/get-all-results", async () => {
   // return c.json({ message: "Voted successfully." });
   const items = await getAllItems();
 

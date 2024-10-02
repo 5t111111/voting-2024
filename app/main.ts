@@ -1,5 +1,5 @@
-import { buildServerApp } from "./app_factory.ts";
+import { buildApp } from "./app_factory.ts";
 
-const app = buildServerApp();
+const app = buildApp();
 
 Deno.serve(app.fetch);

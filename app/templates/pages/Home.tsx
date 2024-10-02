@@ -1,9 +1,9 @@
 import { FC } from "hono/jsx";
-import { Layout } from "../components/Layout.ts";
+import { Vote } from "../../schemas/vote.ts";
+import { data } from "../../data.ts";
 import { Hero } from "../components/Hero.tsx";
 import { Card } from "../components/Card.tsx";
-import { Vote } from "../schemas/vote.ts";
-import { data } from "../data.ts";
+import { Layout } from "../layouts/Layout.tsx";
 
 type Props = {
   voted: boolean;
@@ -33,12 +33,12 @@ export const Home: FC<Props> = (
           ))}
         </ul>
       </div>
-      <div class="mt-12">
+      <div class="mt-12 px-8">
         <hr />
         <h2 class="text-lg mt-12">以下テスト用</h2>
         <p class="mt-4 text-sm">60秒間に1回のみ投票可能です</p>
-        <p class="mt-4">
-          {voted ? `❌ 投票済みです ${diff / 1000}秒前` : "⭕️ 投票できます"}
+        <p class="mt-4 text-xl">
+          {voted ? `❌ 投票済みです (${diff / 1000}秒前)` : "⭕️ 投票できます"}
         </p>
         <h3 class="mt-4 font-bold">投票結果</h3>
         <pre class="mt-2">{JSON.stringify(voteResults, null, 2)}</pre>

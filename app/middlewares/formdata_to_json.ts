@@ -1,16 +1,20 @@
 import { createMiddleware } from "hono/factory";
+import { GlobalAppContext } from "../app_factory.ts";
 
 /**
  * Form data を JSON に変換するミドルウェア
  * Form data を含むリクエストがこのミドルウェアで処理されると、
  * コンテキスト変数の `inputData` に変換された JSON がセットされる
  */
-export const formDataToJson = createMiddleware<{
-  Variables: {
-    // deno-lint-ignore no-explicit-any
-    inputData: any;
-  };
-}>(async (c, next) => {
+export const formDataToJson = createMiddleware<
+  & GlobalAppContext
+  & {
+    Variables: {
+      // deno-lint-ignore no-explicit-any
+      inputData: any;
+    };
+  }
+>(async (c, next) => {
   const contentType = c.req.header("content-type");
 
   if (!contentType) {
