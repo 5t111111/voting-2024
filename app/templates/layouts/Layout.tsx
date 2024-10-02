@@ -12,7 +12,7 @@ export const Layout: FC<Props> = ({ title, description, children }) => {
     <html lang="ja">
       <head>
         <meta charset="UTF-8" />
-        <title>{title}</title>
+        <title>{title} | 簡易投票システム 2024</title>
         <meta name="description" content={description} />
         <head prefix="og: http://ogp.me/ns#" />
         <meta property="og:type" content="website" />

@@ -1,35 +1,47 @@
-import { FreshContext, Handlers, PageProps } from "$fresh/server.ts";
-import { setCookie } from "@std/http/cookie";
+import { Handlers, PageProps } from "$fresh/server.ts";
 
 import { Card } from "../components/Card.tsx";
 import { Hero } from "../components/Hero.tsx";
 import { candidates } from "../data.ts";
-import { generateCsrfToken } from "../utils/csrf.ts";
+import { Head } from "$fresh/runtime.ts";
+import { GlobalAppState } from "./_app.tsx";
 
-export const handler: Handlers = {
-  async GET(_req: Request, ctx: FreshContext) {
-    // 簡易 CSRF 対策のためのトークンをセッションにセット
-    const csrfToken = generateCsrfToken();
-    const resp = await ctx.render({ csrfToken });
-    setCookie(resp.headers, {
-      name: "_csrf",
-      value: csrfToken,
-      maxAge: 120,
-      sameSite: "Lax",
-      path: "/",
-      secure: true,
-    });
+// deno-lint-ignore no-explicit-any
+export const handler: Handlers<any, GlobalAppState> = {
+  async GET(_req, ctx) {
+    // // -- テスト用
+    // const diff = new Date().getTime() - (session.get("voted_at") as number);
+    // const voteResults = await getAllItems();
+    const diff = 100;
+    const voteResults: string[] = [];
+    // // --
+
+    console.log("Index handler: state", ctx.state);
+
+    // コンテキストのステートに設定されている CSRF トークンを取得
+    const csrfToken = ctx.state.csrfToken;
+
+    const resp = await ctx.render({ csrfToken, diff, voteResults });
 
     return resp;
   },
 };
 
 export default function Home({ data }: PageProps) {
-  const csrfToken = data.csrfToken;
+  const title = "トップ";
+  const description = "2024年度版の投票ページです。";
+
+  const { csrfToken, diff, voteResults } = data;
+
   const voted = false;
 
   return (
     <>
+      <Head>
+        <title>{title} | 簡易投票システム 2024</title>
+        <meta property="og:title" content={title} />
+        <meta name="description" content={description} />
+      </Head>
       <Hero />
       <div class="container mx-auto px-4">
         <ul class="flex flex-wrap justify-between mt-24">
@@ -46,20 +58,16 @@ export default function Home({ data }: PageProps) {
           ))}
         </ul>
       </div>
-      {
-        /* <div class={styles.testArea}>
-        <hr class={styles.testAreaSeparator} />
-        <h2 class={styles.testAreaHeader}>以下テスト用</h2>
-        <p class={styles.testAreaPart}>60秒間に1回のみ投票可能です</p>
-        <p class={styles.testAreaPart}>
-          {voted ? `❌ 投票済みです ${diff / 1000}秒前` : "⭕️ 投票できます"}
+      <div class="mt-12 px-8">
+        <hr />
+        <h2 class="text-lg mt-12">以下テスト用</h2>
+        <p class="mt-4 text-sm">60秒間に1回のみ投票可能です</p>
+        <p class="mt-4 text-xl">
+          {voted ? `❌ 投票済みです (${diff / 1000}秒前)` : "⭕️ 投票できます"}
         </p>
-        <h3 class={styles.testAreaHeader}>投票結果</h3>
-        <pre
-          class={styles.testAreaPart}
-        >{JSON.stringify(voteResults, null, 2)}</pre>
-      </div> */
-      }
+        <h3 class="mt-4 font-bold">投票結果</h3>
+        <pre class="mt-2">{JSON.stringify(voteResults, null, 2)}</pre>
+      </div>
     </>
   );
 }

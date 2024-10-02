@@ -23,6 +23,7 @@
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.6.8/",
     "$std/": "https://deno.land/std@0.216.0/",
+    "@5t111111/fresh-session": "jsr:@5t111111/fresh-session@^0.1.7",
     "@preact/signals": "https://esm.sh/*@preact/signals@1.2.2",
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.1",
     "@std/encoding": "jsr:@std/encoding@^1.0.5",

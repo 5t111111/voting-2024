@@ -16,7 +16,7 @@ export const Home: FC<Props> = (
   { voted, csrfToken, diff, voteResults },
 ) => {
   return (
-    <Layout title="2024 投票ページ" description="2024年度版の投票ページです。">
+    <Layout title="トップ" description="2024年度版の投票ページです。">
       <Hero />
       <div class="container mx-auto px-4">
         <ul class="flex flex-wrap justify-between mt-24">
