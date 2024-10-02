@@ -1,10 +1,11 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 
-import { Card } from "../components/Card.tsx";
 import { Hero } from "../components/Hero.tsx";
 import { candidates } from "../data.ts";
 import { Head } from "$fresh/runtime.ts";
 import { GlobalAppState } from "./_app.tsx";
+import { encodeBase64 } from "@std/encoding";
+import { Card } from "../islands/Card.tsx";
 
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, GlobalAppState> = {
@@ -16,10 +17,10 @@ export const handler: Handlers<any, GlobalAppState> = {
     const voteResults: string[] = [];
     // // --
 
-    console.log("Index handler: state", ctx.state);
-
-    // コンテキストのステートに設定されている CSRF トークンを取得
-    const csrfToken = ctx.state.csrfToken;
+    // 簡易 CSRF 対策のための CSRF トークンを発行してセッションにセット
+    const csrfToken = encodeBase64(crypto.getRandomValues(new Uint8Array(32)));
+    const session = ctx.state.session;
+    session.set("csrf_token", csrfToken);
 
     const resp = await ctx.render({ csrfToken, diff, voteResults });
 

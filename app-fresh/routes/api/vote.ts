@@ -1,18 +1,22 @@
-import { FreshContext, Handlers } from "$fresh/server.ts";
+import { Handlers } from "$fresh/server.ts";
 import { incrementCount } from "../../database/kv.ts";
 import { VoteRequest, voteRequestSchema } from "../../schemas/vote_request.ts";
+import { checkIfVoted } from "../../utils/check_if_voted.ts";
+import { GlobalAppState } from "../_app.tsx";
 
-export const handler: Handlers = {
-  async POST(req: Request, ctx: FreshContext) {
+// deno-lint-ignore no-explicit-any
+export const handler: Handlers<any, GlobalAppState> = {
+  async POST(req, ctx) {
     // const session = c.get("session");
 
-    // // 投票済みであれば投票できない
-    // // すでに UI 側でチェックしているのでここではシンプルに 403 を返す
-    // const voted = checkIfVoted(session.get("voted_at") as number);
+    // 投票済みであれば投票できない
+    // すでに UI 側でチェックしているのでここではシンプルに 403 を返す
+    const session = ctx.state.session;
+    const voted = checkIfVoted(session.get("voted_at") as number);
 
-    // if (voted) {
-    //   return new Response("You have already voted.", { status: 403 });
-    // }
+    if (voted) {
+      return new Response("You have already voted.", { status: 403 });
+    }
 
     let voteRequest: VoteRequest;
 
@@ -27,26 +31,25 @@ export const handler: Handlers = {
       });
     }
 
-    // console.log("csrf_token: IN FORMDATA:", voteRequest._csrf);
+    // console.log("csrf_token: IN REQURST:", voteRequest._csrf);
     // console.log("csrf_token: IN SESSION :", session.get("csrf_token"));
 
-    // // CSRF トークンのチェック
-    // if (
-    //   !session.get("csrf_token") ||
-    //   voteRequest._csrf !== session.get("csrf_token")
-    // ) {
-    //   return new Response("CSRF token is invalid.", { status: 403 });
-    // }
+    // CSRF トークンのチェック
+    if (
+      !session.get("csrf_token") ||
+      voteRequest._csrf !== session.get("csrf_token")
+    ) {
+      return new Response("CSRF token is invalid.", { status: 403 });
+    }
 
     // 投票処理
     await incrementCount(voteRequest.id.toString());
 
-    // // session の voted_at にタイムスタンプをセットする
-    // c.get("session").set("voted_at", new Date().getTime());
+    // session の voted_at にタイムスタンプをセットする
+    session.set("voted_at", new Date().getTime());
 
-    return new Response("", {
-      status: 307,
-      headers: { Location: "/" },
+    return new Response(JSON.stringify({ status: "success" }), {
+      status: 200,
     });
   },
 };
