@@ -6,8 +6,9 @@ import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $api_vote from "./routes/api/vote.ts";
 import * as $index from "./routes/index.tsx";
-import * as $Card from "./islands/Card.tsx";
-import * as $Counter from "./islands/Counter.tsx";
+import * as $Candidate from "./islands/Candidate.tsx";
+import * as $CandidateList from "./islands/CandidateList.tsx";
+import * as $DevPanel from "./islands/DevPanel.tsx";
 import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -18,8 +19,9 @@ const manifest = {
     "./routes/index.tsx": $index,
   },
   islands: {
-    "./islands/Card.tsx": $Card,
-    "./islands/Counter.tsx": $Counter,
+    "./islands/Candidate.tsx": $Candidate,
+    "./islands/CandidateList.tsx": $CandidateList,
+    "./islands/DevPanel.tsx": $DevPanel,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;

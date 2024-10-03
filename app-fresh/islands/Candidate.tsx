@@ -1,5 +1,5 @@
 import { FunctionComponent } from "preact";
-import { useSignal } from "@preact/signals";
+import { Signal } from "@preact/signals";
 import { Button } from "../components/Button.tsx";
 
 type Props = {
@@ -7,16 +7,12 @@ type Props = {
   label: string;
   image: string;
   csrfToken: string;
-  voted: boolean;
+  submittedSignal: Signal<boolean>;
 };
 
-export const Card: FunctionComponent<Props> = (
-  { id, label, image, csrfToken, voted },
+export const Candidate: FunctionComponent<Props> = (
+  { id, label, image, csrfToken, submittedSignal },
 ) => {
-  const submitted = useSignal(voted);
-  console.log("voted", voted);
-  console.log("submitted.value", submitted.value);
-
   const onClickVoteButton = async (id: string) => {
     if (!globalThis.confirm(`${label}に投票します。よろしいですか？`)) {
       return;
@@ -35,7 +31,7 @@ export const Card: FunctionComponent<Props> = (
       console.error(error);
     }
 
-    submitted.value = true;
+    submittedSignal.value = true;
   };
 
   return (
@@ -48,7 +44,7 @@ export const Card: FunctionComponent<Props> = (
       <p class="text-lg font-bold text-center mt-4">
         <span class="label">{label}</span>
       </p>
-      {voted || submitted.value
+      {submittedSignal.value
         ? (
           <div class="text-center mt-4">
             <Button

@@ -8,5 +8,6 @@ export function checkIfVoted(votedAt: number | undefined): boolean {
   const diff = new Date().getTime() - votedAt;
 
   // 1分以内に投票していたら投票済みとみなす
-  return diff < 60000;
+  // return diff < 60000;
+  return diff < 1000;
 }

@@ -1,28 +1,34 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 
 import { Hero } from "../components/Hero.tsx";
-import { candidates } from "../data.ts";
 import { Head } from "$fresh/runtime.ts";
 import { GlobalAppState } from "./_app.tsx";
 import { encodeBase64 } from "@std/encoding";
-import { Card } from "../islands/Card.tsx";
+import { checkIfVoted } from "../utils/check_if_voted.ts";
+import { CandidateList } from "../islands/CandidateList.tsx";
+import { getAllItems } from "../database/kv.ts";
+import { useSignal } from "https://esm.sh/v135/@preact/signals@1.2.2/X-ZS8q/dist/signals.js";
+import { DevPanel } from "../islands/DevPanel.tsx";
 
 // deno-lint-ignore no-explicit-any
 export const handler: Handlers<any, GlobalAppState> = {
   async GET(_req, ctx) {
-    // // -- テスト用
-    // const diff = new Date().getTime() - (session.get("voted_at") as number);
-    // const voteResults = await getAllItems();
-    const diff = 100;
-    const voteResults: string[] = [];
-    // // --
+    const session = ctx.state.session;
+
+    // -- テスト用
+    const votedAt = session.get("voted_at") as number | undefined;
+    const diff = new Date().getTime() - (votedAt || 0);
+    const voteResults = await getAllItems();
+    // --
+
+    // 投票済みかどうかを判定
+    const voted = checkIfVoted(session.get("voted_at") as number | undefined);
 
     // 簡易 CSRF 対策のための CSRF トークンを発行してセッションにセット
     const csrfToken = encodeBase64(crypto.getRandomValues(new Uint8Array(32)));
-    const session = ctx.state.session;
     session.set("csrf_token", csrfToken);
 
-    const resp = await ctx.render({ csrfToken, diff, voteResults });
+    const resp = await ctx.render({ voted, csrfToken, diff, voteResults });
 
     return resp;
   },
@@ -32,9 +38,9 @@ export default function Home({ data }: PageProps) {
   const title = "トップ";
   const description = "2024年度版の投票ページです。";
 
-  const { csrfToken, diff, voteResults } = data;
+  const { voted, csrfToken, diff, voteResults } = data;
 
-  const voted = false;
+  const submittedSignal = useSignal(voted);
 
   return (
     <>
@@ -45,30 +51,16 @@ export default function Home({ data }: PageProps) {
       </Head>
       <Hero />
       <div class="container mx-auto px-4">
-        <ul class="flex flex-wrap justify-between mt-24">
-          {candidates.map((candidate) => (
-            <li>
-              <Card
-                id={candidate.id}
-                label={candidate.name}
-                image={candidate.image}
-                csrfToken={csrfToken}
-                voted={voted}
-              />
-            </li>
-          ))}
-        </ul>
+        <CandidateList
+          csrfToken={csrfToken}
+          submittedSignal={submittedSignal}
+        />
       </div>
-      <div class="mt-12 px-8">
-        <hr />
-        <h2 class="text-lg mt-12">以下テスト用</h2>
-        <p class="mt-4 text-sm">60秒間に1回のみ投票可能です</p>
-        <p class="mt-4 text-xl">
-          {voted ? `❌ 投票済みです (${diff / 1000}秒前)` : "⭕️ 投票できます"}
-        </p>
-        <h3 class="mt-4 font-bold">投票結果</h3>
-        <pre class="mt-2">{JSON.stringify(voteResults, null, 2)}</pre>
-      </div>
+      <DevPanel
+        diff={diff}
+        voteResults={voteResults}
+        submittedSignal={submittedSignal}
+      />
     </>
   );
 }
